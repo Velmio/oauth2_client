@@ -12,6 +12,7 @@ class AccessTokenResponse extends OAuth2Response {
   int expiresIn;
   String refreshToken;
   List<String> scope;
+  String userId;
 
   DateTime expirationDate;
 
@@ -34,6 +35,11 @@ class AccessTokenResponse extends OAuth2Response {
         }
 
         scope = scope.map((s) => s.trim()).toList();
+      }
+
+      //Add support for user_id payload
+      if (map.containsKey('user_id')) {
+        userId = map['user_id'];
       }
 
       if (map.containsKey('expires_in')) expiresIn = map['expires_in'];
