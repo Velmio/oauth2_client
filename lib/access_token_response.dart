@@ -99,7 +99,8 @@ class AccessTokenResponse extends OAuth2Response {
           expirationDate != null ? expirationDate.millisecondsSinceEpoch : null,
       'error': error,
       'errorDescription': errorDescription,
-      'errorUri': errorUri
+      'errorUri': errorUri,
+      'user_id': userId
     };
   }
 
