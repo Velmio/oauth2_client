@@ -14,6 +14,20 @@ class OAuth2Response {
     httpStatusCode = 200;
   }
 
+  // OAuth2Response.fromMap(Map<String, dynamic> map) {
+  //   httpStatusCode = map['http_status_code'];
+
+  //   if (map.containsKey('error') && map['error'] != null) {
+  //     error = map['error'];
+  //     errorDescription = map.containsKey('error_description')
+  //         ? map['error_description']
+  //         : null;
+  //     errorUri = map.containsKey('errorUri') ? map['errorUri'] : null;
+  //   }
+  // }
+
+  //Modification for supporting fitbit token refresh error messages
+
   OAuth2Response.fromMap(Map<String, dynamic> map) {
     httpStatusCode = map['http_status_code'];
 
@@ -24,13 +38,20 @@ class OAuth2Response {
           : null;
       errorUri = map.containsKey('errorUri') ? map['errorUri'] : null;
     }
+
+    if (map.containsKey('errors') && map['errors'] != null) {
+      var errorEnry = map['errors'].first;
+      error = errorEnry['errorType'];
+      errorDescription =
+          errorEnry.containsKey('message') ? errorEnry['message'] : null;
+    }
   }
 
   factory OAuth2Response.fromHttpResponse(http.Response response) {
     OAuth2Response resp;
 
     if (response.statusCode != 404) {
-      if(response.body != '') {
+      if (response.body != '') {
         resp = OAuth2Response.fromMap(jsonDecode(response.body));
       } else {
         resp = OAuth2Response();
